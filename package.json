@@ -4,7 +4,7 @@
   "description": "A node module for Google's Universal Analytics tracking",
   "main": "index.js",
   "scripts": {
-    "test": "make test"
+    "test": "make check"
   },
   "repository": "pirxpilot/universal-analytics",
   "keywords": [
@@ -19,9 +19,10 @@
     "uuid": "^3.0.0"
   },
   "devDependencies": {
+    "jshint": "~2",
+    "mocha": "*",
     "should": "*",
-    "sinon": "^1.17.7",
-    "mocha": "*"
+    "sinon": "^1.17.7"
   },
   "author": "Jörg Tillmann <joerg@peaksandpies.com>",
   "license": "MIT"

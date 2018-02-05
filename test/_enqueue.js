@@ -1,15 +1,10 @@
 
-var request = require("request");
-var qs = require("querystring");
 var uuid = require("uuid");
-var should = require("should");
 var sinon = require("sinon");
-var url = require("url");
 
 var ua = require("../lib/index.js");
-var utils = require("../lib/utils.js")
-var config = require("../lib/config.js")
 
+/* global describe, it, beforeEach, afterEach */
 
 describe("ua", function () {
 
@@ -23,13 +18,13 @@ describe("ua", function () {
 		});
 
 		afterEach(function () {
-			send.restore()
+			send.restore();
 		});
 
 		it("should accept arguments (type)", function () {
 			var tid = "UA-XXXXX-XX";
 			var cid = uuid.v4();
-			var type = Math.random().toString()
+			var type = Math.random().toString();
 
 			var visitor = ua(tid, cid)._enqueue(type);
 
@@ -37,17 +32,17 @@ describe("ua", function () {
 
 			visitor._queue.length.should.equal(1, "1 tracking call should have been enqueued");
 
-			visitor._queue[0].should.have.keys("v", "tid", "cid", "t")
-			visitor._queue[0].tid.should.equal(tid)
-			visitor._queue[0].cid.should.equal(cid)
-			visitor._queue[0].t.should.equal(type)
+			visitor._queue[0].should.have.keys("v", "tid", "cid", "t");
+			visitor._queue[0].tid.should.equal(tid);
+			visitor._queue[0].cid.should.equal(cid);
+			visitor._queue[0].t.should.equal(type);
 		});
 
 		it("should accept arguments (type, fn)", function () {
 			var tid = "UA-XXXXX-XX";
 			var cid = uuid.v4();
-			var type = Math.random().toString()
-			var fn = sinon.spy()
+			var type = Math.random().toString();
+			var fn = sinon.spy();
 
 			var visitor = ua(tid, cid)._enqueue(type, fn);
 
@@ -55,19 +50,19 @@ describe("ua", function () {
 
 			visitor._queue.length.should.equal(1, "1 tracking call should have been enqueued");
 
-			visitor._queue[0].should.have.keys("v", "tid", "cid", "t")
-			visitor._queue[0].tid.should.equal(tid)
-			visitor._queue[0].cid.should.equal(cid)
-			visitor._queue[0].t.should.equal(type)
+			visitor._queue[0].should.have.keys("v", "tid", "cid", "t");
+			visitor._queue[0].tid.should.equal(tid);
+			visitor._queue[0].cid.should.equal(cid);
+			visitor._queue[0].t.should.equal(type);
 
-			fn.calledOnce.should.equal(true, "callback should have been called once")
+			fn.calledOnce.should.equal(true, "callback should have been called once");
 		});
 
 		it("should accept arguments (type, params)", function () {
 			var tid = "UA-XXXXX-XX";
 			var cid = uuid.v4();
-			var type = Math.random().toString()
-			var params = {foo: Math.random().toString()}
+			var type = Math.random().toString();
+			var params = {foo: Math.random().toString()};
 
 			var visitor = ua(tid, cid)._enqueue(type, params);
 
@@ -75,9 +70,9 @@ describe("ua", function () {
 
 			visitor._queue.length.should.equal(1, "1 tracking call should have been enqueued");
 
-			visitor._queue[0].should.have.keys("v", "tid", "cid", "t", "foo")
-			visitor._queue[0].tid.should.equal(tid)
-			visitor._queue[0].cid.should.equal(cid)
+			visitor._queue[0].should.have.keys("v", "tid", "cid", "t", "foo");
+			visitor._queue[0].tid.should.equal(tid);
+			visitor._queue[0].cid.should.equal(cid);
 			visitor._queue[0].foo.should.equal(params.foo);
 		});
 
@@ -86,7 +81,7 @@ describe("ua", function () {
 			var cid = uuid.v4();
 			var type = "type";
 			var uid = "user1";
-			var params = {}
+			var params = {};
 
 			var visitor = ua(tid, cid, { uid: uid})._enqueue(type, params);
 
@@ -96,9 +91,9 @@ describe("ua", function () {
 		it("should accept arguments (type, params, fn)", function () {
 			var tid = "UA-XXXXX-XX";
 			var cid = uuid.v4();
-			var type = Math.random().toString()
-			var params = {foo: Math.random().toString()}
-			var fn = sinon.spy()
+			var type = Math.random().toString();
+			var params = {foo: Math.random().toString()};
+			var fn = sinon.spy();
 
 			var visitor = ua(tid, cid)._enqueue(type, params, fn);
 
@@ -106,20 +101,20 @@ describe("ua", function () {
 
 			visitor._queue.length.should.equal(1, "1 tracking call should have been enqueued");
 
-			visitor._queue[0].should.have.keys("v", "tid", "cid", "t", "foo")
-			visitor._queue[0].tid.should.equal(tid)
-			visitor._queue[0].cid.should.equal(cid)
+			visitor._queue[0].should.have.keys("v", "tid", "cid", "t", "foo");
+			visitor._queue[0].tid.should.equal(tid);
+			visitor._queue[0].cid.should.equal(cid);
 			visitor._queue[0].foo.should.equal(params.foo);
 
-			fn.calledOnce.should.equal(true, "callback should have been called once")
+			fn.calledOnce.should.equal(true, "callback should have been called once");
 		});
 
 		it("should continue adding to the queue", function () {
 			var tid = "UA-XXXXX-XX";
 			var cid = uuid.v4();
-			var type = Math.random().toString()
+			var type = Math.random().toString();
 
-			var visitor = ua(tid, cid)
+			var visitor = ua(tid, cid);
 
 			visitor._enqueue(type);
 			visitor._enqueue(type);
@@ -127,7 +122,7 @@ describe("ua", function () {
 			visitor._enqueue(type);
 
 			visitor._queue.length.should.equal(4, "4 tracking calls should have been enqueued");
-		})
+		});
 
 	});
 
