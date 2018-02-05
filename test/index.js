@@ -6,7 +6,7 @@ var ua = require("../lib/index.js");
 var utils = require("../lib/utils.js");
 var config = require("../lib/config.js");
 
-/* global describe, it, before */
+/* global describe, it */
 
 describe("ua", function () {
 
@@ -114,35 +114,27 @@ describe("ua", function () {
 
 	describe("params", function () {
 
-	    var visitor;
+    it('should not translate params', function(){
+      var params = {
+        tid: 1,
+        cid: 1,
+        somefake: 1,
+        v: 'a'
+      };
 
-	    before(function () {
-	    	var tid = "UA-XXXXX-XX";
-		    var cid = uuid.v4();
-		    visitor = ua(tid, cid);
-	    });
-
-	    it('should not translate params', function(){
-	        var params = {
-	            tid: 1,
-	            cid: 1,
-	            somefake: 1,
-	            v: 'a'
-	        };
-
-	        visitor._translateParams(params).should.eql(params);
-	    });
-
-	    it('should match all parameters and each should be in the list of accepted', function(){
-	        var res = visitor._translateParams(config.parametersMap);
-	        for (var i in res) {
-	            if (res.hasOwnProperty(i)) {
-	                res[i].should.equal(i);
-	                config.acceptedParameters.should.containEql(i);
-	            }
-	        }
-	    });
-
+      utils.translateParams(params).should.eql(params);
     });
+
+    it('should match all parameters and each should be in the list of accepted', function(){
+      var res = utils.translateParams(config.parametersMap);
+      for (var i in res) {
+        if (res.hasOwnProperty(i)) {
+          res[i].should.equal(i);
+          config.acceptedParameters.should.containEql(i);
+        }
+      }
+    });
+
+  });
 
 });
