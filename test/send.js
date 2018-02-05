@@ -1,15 +1,13 @@
 
 var request = require("request");
 var qs = require("querystring");
-var uuid = require("uuid");
-var should = require("should");
 var sinon = require("sinon");
 var url = require("url");
 
+var config = require("../lib/config.js");
 var ua = require("../lib/index.js");
-var utils = require("../lib/utils.js")
-var config = require("../lib/config.js")
 
+/* global describe, it, beforeEach, afterEach */
 
 describe("ua", function () {
 
@@ -21,7 +19,7 @@ describe("ua", function () {
 		});
 
 		afterEach(function () {
-			post.restore()
+			post.restore();
 		});
 
 		it("should immidiately return with an empty queue", function () {
@@ -30,8 +28,8 @@ describe("ua", function () {
 
 			visitor.send(fn);
 
-			post.called.should.equal(false, "no request should have been sent")
-			fn.calledOnce.should.equal(true, "callback should have been called once")
+			post.called.should.equal(false, "no request should have been sent");
+			fn.calledOnce.should.equal(true, "callback should have been called once");
 			fn.thisValues[0].should.equal(visitor, "callback should be called in the context of the visitor instance");
 			fn.args[0].should.eql([null, 0], "no error, no requests");
 		});
@@ -39,10 +37,10 @@ describe("ua", function () {
 		it("should include data in POST body", function (done) {
 			var paramSets = [
 				{first: "123"}
-			]
+			];
 
 			var fn = sinon.spy(function () {
-				fn.calledOnce.should.equal(true, "callback should have been called once")
+				fn.calledOnce.should.equal(true, "callback should have been called once");
 				fn.thisValues[0].should.equal(visitor, "callback should be called in the context of the visitor instance");
 				fn.args[0].should.eql([null, 1], "no error, 1 requests");
 
@@ -73,10 +71,10 @@ describe("ua", function () {
 				{first: Math.random()},
 				{second: Math.random()},
 				{third: Math.random()}
-			]
+			];
 
 			var fn = sinon.spy(function () {
-				fn.calledOnce.should.equal(true, "callback should have been called once")
+				fn.calledOnce.should.equal(true, "callback should have been called once");
 				fn.thisValues[0].should.equal(visitor, "callback should be called in the context of the visitor instance");
 
 				fn.args[0].should.eql([null, 3], "no error, 3 requests");
@@ -85,7 +83,7 @@ describe("ua", function () {
 			});
 
 			var visitor = ua({enableBatching:false});
-			visitor._queue.push.apply(visitor._queue, paramSets)
+			visitor._queue.push.apply(visitor._queue, paramSets);
 			visitor.send(fn);
 		});
 
@@ -93,7 +91,7 @@ describe("ua", function () {
 			it("should send request to collect path when only one payload", function(done) {
 				var paramSets = [
 					{first: Math.random()}
-				]
+				];
 
 				var fn = sinon.spy(function () {
 					fn.args[0].should.eql([null, 1], "no error, 1 requests");
@@ -106,7 +104,7 @@ describe("ua", function () {
 				});
 
 				var visitor = ua({enableBatching:true});
-				visitor._queue.push.apply(visitor._queue, paramSets)
+				visitor._queue.push.apply(visitor._queue, paramSets);
 				visitor.send(fn);
 			});
 
@@ -115,7 +113,7 @@ describe("ua", function () {
 					{first: Math.random()},
 					{second: Math.random()},
 					{third: Math.random()}
-				]
+				];
 
 				var fn = sinon.spy(function () {
 					fn.args[0].should.eql([null, 1], "no error, 1 requests");
@@ -128,7 +126,7 @@ describe("ua", function () {
 				});
 
 				var visitor = ua({enableBatching:true});
-				visitor._queue.push.apply(visitor._queue, paramSets)
+				visitor._queue.push.apply(visitor._queue, paramSets);
 				visitor.send(fn);
 			});
 
@@ -137,10 +135,10 @@ describe("ua", function () {
 					{first: Math.random()},
 					{second: Math.random()},
 					{third: Math.random()}
-				]
+				];
 
 				var fn = sinon.spy(function () {
-					fn.calledOnce.should.equal(true, "callback should have been called once")
+					fn.calledOnce.should.equal(true, "callback should have been called once");
 					fn.thisValues[0].should.equal(visitor, "callback should be called in the context of the visitor instance");
 
 					fn.args[0].should.eql([null, 1], "no error, 1 requests");
@@ -155,19 +153,19 @@ describe("ua", function () {
 				});
 
 				var visitor = ua({enableBatching:true});
-				visitor._queue.push.apply(visitor._queue, paramSets)
+				visitor._queue.push.apply(visitor._queue, paramSets);
 				visitor.send(fn);
-			})
+			});
 
 			it("should batch data based on batchSize", function(done) {
 				var paramSets = [
 					{first: Math.random()},
 					{second: Math.random()},
 					{third: Math.random()}
-				]
+				];
 
 				var fn = sinon.spy(function () {
-					fn.calledOnce.should.equal(true, "callback should have been called once")
+					fn.calledOnce.should.equal(true, "callback should have been called once");
 					fn.thisValues[0].should.equal(visitor, "callback should be called in the context of the visitor instance");
 
 					fn.args[0].should.eql([null, 2], "no error, 2 requests");
@@ -180,15 +178,10 @@ describe("ua", function () {
 				});
 
 				var visitor = ua({enableBatching:true, batchSize: 2});
-				visitor._queue.push.apply(visitor._queue, paramSets)
+				visitor._queue.push.apply(visitor._queue, paramSets);
 				visitor.send(fn);
 			});
 		});
-
-
-
-
-
 
 		it("should add custom headers to request header", function (done) {
 			var fn = sinon.spy(function () {
@@ -202,7 +195,7 @@ describe("ua", function () {
 
 				(parsedUrl.protocol + "//" + parsedUrl.host).should.equal(config.hostname);
 
-				options.should.have.keys("headers","body")
+				options.should.have.keys("headers","body");
 				options.headers.should.have.key("User-Agent");
 				options.headers["User-Agent"].should.equal("Test User Agent");
 
@@ -216,9 +209,7 @@ describe("ua", function () {
 			visitor.send(fn);
 		});
 
-
-
-	})
+	});
 
 });
 

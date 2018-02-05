@@ -1,15 +1,9 @@
 
-var request = require("request");
-var qs = require("querystring");
-var uuid = require("uuid");
-var should = require("should");
 var sinon = require("sinon");
-var url = require("url");
 
 var ua = require("../lib/index.js");
-var utils = require("../lib/utils.js")
-var config = require("../lib/config.js")
 
+/* global describe, it, beforeEach, afterEach */
 
 describe("ua", function () {
 
@@ -20,7 +14,7 @@ describe("ua", function () {
 		beforeEach(function () {
 			_enqueue = sinon.stub(ua.Visitor.prototype, "_enqueue", function (type, params, fn) {
 				if (fn) {
-					(typeof fn).should.equal('function', "#_enqueue should receive a callback")
+					(typeof fn).should.equal('function', "#_enqueue should receive a callback");
 					fn();
 				}
 				return this;
@@ -28,13 +22,13 @@ describe("ua", function () {
 		});
 
 		afterEach(function () {
-			_enqueue.restore()
+			_enqueue.restore();
 		});
 
 
 		it("should be available via the #i shortcut", function () {
-			var visitor = ua()
-			visitor.i.should.equal(visitor.item)
+			var visitor = ua();
+			visitor.i.should.equal(visitor.item);
 		});
 
 
@@ -49,12 +43,12 @@ describe("ua", function () {
 			visitor._context = result._context;
 			result.should.eql(visitor, "should return a visitor that is identical except for the context");
 			result.should.be.instanceof(ua.Visitor);
-			result._context.should.eql(_enqueue.args[1][1], "the transaction params should be persisted as the context of the visitor clone")
+			result._context.should.eql(_enqueue.args[1][1], "the transaction params should be persisted as the context of the visitor clone");
 
 			_enqueue.calledTwice.should.equal(true, "#_enqueue should have been called twice, once for the transaction before");
 			_enqueue.args[0][0].should.equal("transaction");
 			_enqueue.args[1][0].should.equal("item");
-			_enqueue.args[1][1].should.have.keys("ti", "ip")
+			_enqueue.args[1][1].should.have.keys("ti", "ip");
 			_enqueue.args[1][1].ti.should.equal(transaction);
 			_enqueue.args[1][1].ip.should.equal(price);
 		});
@@ -63,7 +57,7 @@ describe("ua", function () {
 		it("should accept arguments (price, fn) when chained to transaction", function () {
 			var transaction = Math.random().toString();
 			var price = Math.random();
-			var fn = sinon.spy()
+			var fn = sinon.spy();
 
 			var visitor = ua().transaction(transaction);
 
@@ -72,16 +66,16 @@ describe("ua", function () {
 			visitor._context = result._context;
 			result.should.eql(visitor, "should return a visitor that is identical except for the context");
 			result.should.be.instanceof(ua.Visitor);
-			result._context.should.eql(_enqueue.args[1][1], "the transaction params should be persisted as the context of the visitor clone")
+			result._context.should.eql(_enqueue.args[1][1], "the transaction params should be persisted as the context of the visitor clone");
 
 			_enqueue.calledTwice.should.equal(true, "#_enqueue should have been called twice, once for the transaction before");
 			_enqueue.args[0][0].should.equal("transaction");
 			_enqueue.args[1][0].should.equal("item");
-			_enqueue.args[1][1].should.have.keys("ti", "ip")
+			_enqueue.args[1][1].should.have.keys("ti", "ip");
 			_enqueue.args[1][1].ti.should.equal(transaction);
 			_enqueue.args[1][1].ip.should.equal(price);
 
-			fn.calledOnce.should.equal(true, "callback should have been called once")
+			fn.calledOnce.should.equal(true, "callback should have been called once");
 		});
 
 
@@ -97,12 +91,12 @@ describe("ua", function () {
 			visitor._context = result._context;
 			result.should.eql(visitor, "should return a visitor that is identical except for the context");
 			result.should.be.instanceof(ua.Visitor);
-			result._context.should.eql(_enqueue.args[1][1], "the transaction params should be persisted as the context of the visitor clone")
+			result._context.should.eql(_enqueue.args[1][1], "the transaction params should be persisted as the context of the visitor clone");
 
 			_enqueue.calledTwice.should.equal(true, "#_enqueue should have been called twice, once for the transaction before");
 			_enqueue.args[0][0].should.equal("transaction");
 			_enqueue.args[1][0].should.equal("item");
-			_enqueue.args[1][1].should.have.keys("ti", "ip", "iq")
+			_enqueue.args[1][1].should.have.keys("ti", "ip", "iq");
 			_enqueue.args[1][1].ti.should.equal(transaction);
 			_enqueue.args[1][1].ip.should.equal(price);
 			_enqueue.args[1][1].iq.should.equal(quantity);
@@ -113,7 +107,7 @@ describe("ua", function () {
 			var transaction = Math.random().toString();
 			var price = Math.random();
 			var quantity = Math.random();
-			var fn = sinon.spy()
+			var fn = sinon.spy();
 
 			var visitor = ua().transaction(transaction);
 
@@ -122,17 +116,17 @@ describe("ua", function () {
 			visitor._context = result._context;
 			result.should.eql(visitor, "should return a visitor that is identical except for the context");
 			result.should.be.instanceof(ua.Visitor);
-			result._context.should.eql(_enqueue.args[1][1], "the transaction params should be persisted as the context of the visitor clone")
+			result._context.should.eql(_enqueue.args[1][1], "the transaction params should be persisted as the context of the visitor clone");
 
 			_enqueue.calledTwice.should.equal(true, "#_enqueue should have been called twice, once for the transaction before");
 			_enqueue.args[0][0].should.equal("transaction");
 			_enqueue.args[1][0].should.equal("item");
-			_enqueue.args[1][1].should.have.keys("ti", "ip", "iq")
+			_enqueue.args[1][1].should.have.keys("ti", "ip", "iq");
 			_enqueue.args[1][1].ti.should.equal(transaction);
 			_enqueue.args[1][1].ip.should.equal(price);
 			_enqueue.args[1][1].iq.should.equal(quantity);
 
-			fn.calledOnce.should.equal(true, "callback should have been called once")
+			fn.calledOnce.should.equal(true, "callback should have been called once");
 		});
 
 
@@ -149,12 +143,12 @@ describe("ua", function () {
 			visitor._context = result._context;
 			result.should.eql(visitor, "should return a visitor that is identical except for the context");
 			result.should.be.instanceof(ua.Visitor);
-			result._context.should.eql(_enqueue.args[1][1], "the transaction params should be persisted as the context of the visitor clone")
+			result._context.should.eql(_enqueue.args[1][1], "the transaction params should be persisted as the context of the visitor clone");
 
 			_enqueue.calledTwice.should.equal(true, "#_enqueue should have been called twice, once for the transaction before");
 			_enqueue.args[0][0].should.equal("transaction");
 			_enqueue.args[1][0].should.equal("item");
-			_enqueue.args[1][1].should.have.keys("ti", "ip", "iq", "ic")
+			_enqueue.args[1][1].should.have.keys("ti", "ip", "iq", "ic");
 			_enqueue.args[1][1].ti.should.equal(transaction);
 			_enqueue.args[1][1].ip.should.equal(price);
 			_enqueue.args[1][1].iq.should.equal(quantity);
@@ -167,7 +161,7 @@ describe("ua", function () {
 			var price = Math.random();
 			var quantity = Math.random();
 			var sku = Math.random().toString();
-			var fn = sinon.spy()
+			var fn = sinon.spy();
 
 			var visitor = ua().transaction(transaction);
 
@@ -176,18 +170,18 @@ describe("ua", function () {
 			visitor._context = result._context;
 			result.should.eql(visitor, "should return a visitor that is identical except for the context");
 			result.should.be.instanceof(ua.Visitor);
-			result._context.should.eql(_enqueue.args[1][1], "the transaction params should be persisted as the context of the visitor clone")
+			result._context.should.eql(_enqueue.args[1][1], "the transaction params should be persisted as the context of the visitor clone");
 
 			_enqueue.calledTwice.should.equal(true, "#_enqueue should have been called twice, once for the transaction before");
 			_enqueue.args[0][0].should.equal("transaction");
 			_enqueue.args[1][0].should.equal("item");
-			_enqueue.args[1][1].should.have.keys("ti", "ip", "iq", "ic")
+			_enqueue.args[1][1].should.have.keys("ti", "ip", "iq", "ic");
 			_enqueue.args[1][1].ti.should.equal(transaction);
 			_enqueue.args[1][1].ip.should.equal(price);
 			_enqueue.args[1][1].iq.should.equal(quantity);
 			_enqueue.args[1][1].ic.should.equal(sku);
 
-			fn.calledOnce.should.equal(true, "callback should have been called once")
+			fn.calledOnce.should.equal(true, "callback should have been called once");
 		});
 
 
@@ -205,12 +199,12 @@ describe("ua", function () {
 			visitor._context = result._context;
 			result.should.eql(visitor, "should return a visitor that is identical except for the context");
 			result.should.be.instanceof(ua.Visitor);
-			result._context.should.eql(_enqueue.args[1][1], "the transaction params should be persisted as the context of the visitor clone")
+			result._context.should.eql(_enqueue.args[1][1], "the transaction params should be persisted as the context of the visitor clone");
 
 			_enqueue.calledTwice.should.equal(true, "#_enqueue should have been called twice, once for the transaction before");
 			_enqueue.args[0][0].should.equal("transaction");
 			_enqueue.args[1][0].should.equal("item");
-			_enqueue.args[1][1].should.have.keys("ti", "ip", "iq", "ic", "in")
+			_enqueue.args[1][1].should.have.keys("ti", "ip", "iq", "ic", "in");
 			_enqueue.args[1][1].ti.should.equal(transaction);
 			_enqueue.args[1][1].ip.should.equal(price);
 			_enqueue.args[1][1].iq.should.equal(quantity);
@@ -225,7 +219,7 @@ describe("ua", function () {
 			var quantity = Math.random();
 			var sku = Math.random().toString();
 			var name = Math.random().toString();
-			var fn = sinon.spy()
+			var fn = sinon.spy();
 
 			var visitor = ua().transaction(transaction);
 
@@ -234,19 +228,19 @@ describe("ua", function () {
 			visitor._context = result._context;
 			result.should.eql(visitor, "should return a visitor that is identical except for the context");
 			result.should.be.instanceof(ua.Visitor);
-			result._context.should.eql(_enqueue.args[1][1], "the transaction params should be persisted as the context of the visitor clone")
+			result._context.should.eql(_enqueue.args[1][1], "the transaction params should be persisted as the context of the visitor clone");
 
 			_enqueue.calledTwice.should.equal(true, "#_enqueue should have been called twice, once for the transaction before");
 			_enqueue.args[0][0].should.equal("transaction");
 			_enqueue.args[1][0].should.equal("item");
-			_enqueue.args[1][1].should.have.keys("ti", "ip", "iq", "ic", "in")
+			_enqueue.args[1][1].should.have.keys("ti", "ip", "iq", "ic", "in");
 			_enqueue.args[1][1].ti.should.equal(transaction);
 			_enqueue.args[1][1].ip.should.equal(price);
 			_enqueue.args[1][1].iq.should.equal(quantity);
 			_enqueue.args[1][1].ic.should.equal(sku);
 			_enqueue.args[1][1].in.should.equal(name);
 
-			fn.calledOnce.should.equal(true, "callback should have been called once")
+			fn.calledOnce.should.equal(true, "callback should have been called once");
 		});
 
 
@@ -265,12 +259,12 @@ describe("ua", function () {
 			visitor._context = result._context;
 			result.should.eql(visitor, "should return a visitor that is identical except for the context");
 			result.should.be.instanceof(ua.Visitor);
-			result._context.should.eql(_enqueue.args[1][1], "the transaction params should be persisted as the context of the visitor clone")
+			result._context.should.eql(_enqueue.args[1][1], "the transaction params should be persisted as the context of the visitor clone");
 
 			_enqueue.calledTwice.should.equal(true, "#_enqueue should have been called twice, once for the transaction before");
 			_enqueue.args[0][0].should.equal("transaction");
 			_enqueue.args[1][0].should.equal("item");
-			_enqueue.args[1][1].should.have.keys("ti", "ip", "iq", "ic", "in", "iv")
+			_enqueue.args[1][1].should.have.keys("ti", "ip", "iq", "ic", "in", "iv");
 			_enqueue.args[1][1].ti.should.equal(transaction);
 			_enqueue.args[1][1].ip.should.equal(price);
 			_enqueue.args[1][1].iq.should.equal(quantity);
@@ -287,7 +281,7 @@ describe("ua", function () {
 			var sku = Math.random().toString();
 			var name = Math.random().toString();
 			var variation = Math.random().toString();
-			var fn = sinon.spy()
+			var fn = sinon.spy();
 
 			var visitor = ua().transaction(transaction);
 
@@ -296,12 +290,12 @@ describe("ua", function () {
 			visitor._context = result._context;
 			result.should.eql(visitor, "should return a visitor that is identical except for the context");
 			result.should.be.instanceof(ua.Visitor);
-			result._context.should.eql(_enqueue.args[1][1], "the transaction params should be persisted as the context of the visitor clone")
+			result._context.should.eql(_enqueue.args[1][1], "the transaction params should be persisted as the context of the visitor clone");
 
 			_enqueue.calledTwice.should.equal(true, "#_enqueue should have been called twice, once for the transaction before");
 			_enqueue.args[0][0].should.equal("transaction");
 			_enqueue.args[1][0].should.equal("item");
-			_enqueue.args[1][1].should.have.keys("ti", "ip", "iq", "ic", "in", "iv")
+			_enqueue.args[1][1].should.have.keys("ti", "ip", "iq", "ic", "in", "iv");
 			_enqueue.args[1][1].ti.should.equal(transaction);
 			_enqueue.args[1][1].ip.should.equal(price);
 			_enqueue.args[1][1].iq.should.equal(quantity);
@@ -309,7 +303,7 @@ describe("ua", function () {
 			_enqueue.args[1][1].in.should.equal(name);
 			_enqueue.args[1][1].iv.should.equal(variation);
 
-			fn.calledOnce.should.equal(true, "callback should have been called once")
+			fn.calledOnce.should.equal(true, "callback should have been called once");
 		});
 
 
@@ -329,12 +323,12 @@ describe("ua", function () {
 			visitor._context = result._context;
 			result.should.eql(visitor, "should return a visitor that is identical except for the context");
 			result.should.be.instanceof(ua.Visitor);
-			result._context.should.eql(_enqueue.args[1][1], "the transaction params should be persisted as the context of the visitor clone")
+			result._context.should.eql(_enqueue.args[1][1], "the transaction params should be persisted as the context of the visitor clone");
 
 			_enqueue.calledTwice.should.equal(true, "#_enqueue should have been called twice, once for the transaction before");
 			_enqueue.args[0][0].should.equal("transaction");
 			_enqueue.args[1][0].should.equal("item");
-			_enqueue.args[1][1].should.have.keys("ti", "ip", "iq", "ic", "in", "iv", "foo")
+			_enqueue.args[1][1].should.have.keys("ti", "ip", "iq", "ic", "in", "iv", "foo");
 			_enqueue.args[1][1].ti.should.equal(transaction);
 			_enqueue.args[1][1].ip.should.equal(price);
 			_enqueue.args[1][1].iq.should.equal(quantity);
@@ -353,7 +347,7 @@ describe("ua", function () {
 			var name = Math.random().toString();
 			var variation = Math.random().toString();
 			var params = {foo: Math.random().toString()};
-			var fn = sinon.spy()
+			var fn = sinon.spy();
 
 			var visitor = ua().transaction(transaction);
 
@@ -362,12 +356,12 @@ describe("ua", function () {
 			visitor._context = result._context;
 			result.should.eql(visitor, "should return a visitor that is identical except for the context");
 			result.should.be.instanceof(ua.Visitor);
-			result._context.should.eql(_enqueue.args[1][1], "the transaction params should be persisted as the context of the visitor clone")
+			result._context.should.eql(_enqueue.args[1][1], "the transaction params should be persisted as the context of the visitor clone");
 
 			_enqueue.calledTwice.should.equal(true, "#_enqueue should have been called twice, once for the transaction before");
 			_enqueue.args[0][0].should.equal("transaction");
 			_enqueue.args[1][0].should.equal("item");
-			_enqueue.args[1][1].should.have.keys("ti", "ip", "iq", "ic", "in", "iv", "foo")
+			_enqueue.args[1][1].should.have.keys("ti", "ip", "iq", "ic", "in", "iv", "foo");
 			_enqueue.args[1][1].ti.should.equal(transaction);
 			_enqueue.args[1][1].ip.should.equal(price);
 			_enqueue.args[1][1].iq.should.equal(quantity);
@@ -376,7 +370,7 @@ describe("ua", function () {
 			_enqueue.args[1][1].iv.should.equal(variation);
 			_enqueue.args[1][1].foo.should.equal(params.foo);
 
-			fn.calledOnce.should.equal(true, "callback should have been called once")
+			fn.calledOnce.should.equal(true, "callback should have been called once");
 		});
 
 
@@ -387,7 +381,7 @@ describe("ua", function () {
 			var name = Math.random().toString();
 			var variation = Math.random().toString();
 			var params = {ti: Math.random()};
-			var fn = sinon.spy()
+			var fn = sinon.spy();
 
 			var visitor = ua();
 
@@ -396,11 +390,11 @@ describe("ua", function () {
 			visitor._context = result._context;
 			result.should.eql(visitor, "should return a visitor that is identical except for the context");
 			result.should.be.instanceof(ua.Visitor);
-			result._context.should.eql(_enqueue.args[0][1], "the transaction params should be persisted as the context of the visitor clone")
+			result._context.should.eql(_enqueue.args[0][1], "the transaction params should be persisted as the context of the visitor clone");
 
 			_enqueue.calledOnce.should.equal(true, "#_enqueue should have been called once");
 			_enqueue.args[0][0].should.equal("item");
-			_enqueue.args[0][1].should.have.keys("ti", "ip", "iq", "ic", "in", "iv")
+			_enqueue.args[0][1].should.have.keys("ti", "ip", "iq", "ic", "in", "iv");
 			_enqueue.args[0][1].ip.should.equal(price);
 			_enqueue.args[0][1].iq.should.equal(quantity);
 			_enqueue.args[0][1].ic.should.equal(sku);
@@ -408,7 +402,7 @@ describe("ua", function () {
 			_enqueue.args[0][1].iv.should.equal(variation);
 			_enqueue.args[0][1].ti.should.equal(params.ti);
 
-			fn.calledOnce.should.equal(true, "callback should have been called once")
+			fn.calledOnce.should.equal(true, "callback should have been called once");
 		});
 
 
@@ -421,7 +415,7 @@ describe("ua", function () {
 				iv: Math.random().toString(),
 				ti: Math.random()
 			};
-			var fn = sinon.spy()
+			var fn = sinon.spy();
 
 			var visitor = ua();
 
@@ -430,11 +424,11 @@ describe("ua", function () {
 			visitor._context = result._context;
 			result.should.eql(visitor, "should return a visitor that is identical except for the context");
 			result.should.be.instanceof(ua.Visitor);
-			result._context.should.eql(_enqueue.args[0][1], "the transaction params should be persisted as the context of the visitor clone")
+			result._context.should.eql(_enqueue.args[0][1], "the transaction params should be persisted as the context of the visitor clone");
 
 			_enqueue.calledOnce.should.equal(true, "#_enqueue should have been called once");
 			_enqueue.args[0][0].should.equal("item");
-			_enqueue.args[0][1].should.have.keys("ti", "ip", "iq", "ic", "in", "iv")
+			_enqueue.args[0][1].should.have.keys("ti", "ip", "iq", "ic", "in", "iv");
 			_enqueue.args[0][1].ip.should.equal(params.ip);
 			_enqueue.args[0][1].iq.should.equal(params.iq);
 			_enqueue.args[0][1].ic.should.equal(params.ic);
@@ -442,7 +436,7 @@ describe("ua", function () {
 			_enqueue.args[0][1].iv.should.equal(params.iv);
 			_enqueue.args[0][1].ti.should.equal(params.ti);
 
-			fn.calledOnce.should.equal(true, "callback should have been called once")
+			fn.calledOnce.should.equal(true, "callback should have been called once");
 		});
 
 
@@ -455,7 +449,7 @@ describe("ua", function () {
 				in: Math.random().toString(),
 				iv: Math.random().toString()
 			};
-			var fn = sinon.spy()
+			var fn = sinon.spy();
 
 			var visitor = ua().transaction(transaction);
 
@@ -464,11 +458,11 @@ describe("ua", function () {
 			visitor._context = result._context;
 			result.should.eql(visitor, "should return a visitor that is identical except for the context");
 			result.should.be.instanceof(ua.Visitor);
-			result._context.should.eql(_enqueue.args[1][1], "the transaction params should be persisted as the context of the visitor clone")
+			result._context.should.eql(_enqueue.args[1][1], "the transaction params should be persisted as the context of the visitor clone");
 
 			_enqueue.calledTwice.should.equal(true, "#_enqueue should have been called twice, once for the transaction");
 			_enqueue.args[1][0].should.equal("item");
-			_enqueue.args[1][1].should.have.keys("ti", "ip", "iq", "ic", "in", "iv")
+			_enqueue.args[1][1].should.have.keys("ti", "ip", "iq", "ic", "in", "iv");
 			_enqueue.args[1][1].ip.should.equal(params.ip);
 			_enqueue.args[1][1].iq.should.equal(params.iq);
 			_enqueue.args[1][1].ic.should.equal(params.ic);
@@ -476,7 +470,7 @@ describe("ua", function () {
 			_enqueue.args[1][1].iv.should.equal(params.iv);
 			_enqueue.args[1][1].ti.should.equal(transaction);
 
-			fn.calledOnce.should.equal(true, "callback should have been called once")
+			fn.calledOnce.should.equal(true, "callback should have been called once");
 		});
 
 
@@ -488,11 +482,11 @@ describe("ua", function () {
 			var name = Math.random().toString();
 			var name2 = Math.random().toString();
 			var variation = Math.random().toString();
-			var fn = sinon.spy()
+			var fn = sinon.spy();
 
 			var visitor = ua().transaction(transaction);
 
-			var result = visitor.item(price, quantity, sku, name, variation).item({in: name2}, fn);
+			visitor.item(price, quantity, sku, name, variation).item({in: name2}, fn);
 
 			_enqueue.calledThrice.should.equal(true, "#_enqueue should have been called thrice, once for the transaction before");
 			_enqueue.args[0][0].should.equal("transaction");
@@ -505,7 +499,7 @@ describe("ua", function () {
 			_enqueue.args[1][1].iv.should.equal(_enqueue.args[2][1].iv, "iv should be equal on both");
 			_enqueue.args[2][1].in.should.equal(name2, "name should have changed on second item");
 
-			fn.calledOnce.should.equal(true, "callback should have been called once")
+			fn.calledOnce.should.equal(true, "callback should have been called once");
 		});
 
 
@@ -517,7 +511,7 @@ describe("ua", function () {
 				in: Math.random().toString(),
 				iv: Math.random().toString()
 			};
-			var fn = sinon.spy()
+			var fn = sinon.spy();
 
 			var visitor = ua();
 
@@ -527,7 +521,7 @@ describe("ua", function () {
 			result.should.eql(visitor, "should return a visitor that is identical except for the context");
 
 			result.should.be.instanceof(ua.Visitor);
-			result._context.should.eql({}, "the transaction params should not be persisted")
+			result._context.should.eql({}, "the transaction params should not be persisted");
 
 			_enqueue.called.should.equal(false, "#_enqueue should have not been called once");
 			fn.calledOnce.should.equal(true, "callback should have been called once");

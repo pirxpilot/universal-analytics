@@ -1,18 +1,11 @@
 
-var request = require("request");
-var qs = require("querystring");
-var uuid = require("uuid");
-var should = require("should");
 var sinon = require("sinon");
-var url = require("url");
 
 var ua = require("../lib/index.js");
-var utils = require("../lib/utils.js")
-var config = require("../lib/config.js")
 
+/* global describe, it, beforeEach, afterEach */
 
 describe("ua", function () {
-
 
 	describe("#timing", function () {
 		var _enqueue;
@@ -27,14 +20,14 @@ describe("ua", function () {
 		});
 
 		afterEach(function () {
-			_enqueue.restore()
+			_enqueue.restore();
 		});
 
 
 		it("should accept arguments (category)", function () {
 			var category = Math.random().toString();
 
-			var visitor = ua()
+			var visitor = ua();
 
 			var result = visitor.timing(category);
 
@@ -42,11 +35,11 @@ describe("ua", function () {
 			result.should.eql(visitor, "should return a visitor that is identical except for the context");
 
 			result.should.be.instanceof(ua.Visitor);
-			result._context.should.eql(_enqueue.args[0][1], "the pageview params should be persisted as the context of the visitor clone")
+			result._context.should.eql(_enqueue.args[0][1], "the pageview params should be persisted as the context of the visitor clone");
 
 			_enqueue.calledOnce.should.equal(true, "#_enqueue should have been called once");
 			_enqueue.args[0][0].should.equal("timing");
-			_enqueue.args[0][1].should.have.keys("utc")
+			_enqueue.args[0][1].should.have.keys("utc");
 			_enqueue.args[0][1].utc.should.equal(category);
 		});
 
@@ -55,7 +48,7 @@ describe("ua", function () {
 			var category = Math.random().toString();
 			var fn = sinon.spy();
 
-			var visitor = ua()
+			var visitor = ua();
 
 			var result = visitor.timing(category, fn);
 
@@ -63,14 +56,14 @@ describe("ua", function () {
 			result.should.eql(visitor, "should return a visitor that is identical except for the context");
 
 			result.should.be.instanceof(ua.Visitor);
-			result._context.should.eql(_enqueue.args[0][1], "the pageview params should be persisted as the context of the visitor clone")
+			result._context.should.eql(_enqueue.args[0][1], "the pageview params should be persisted as the context of the visitor clone");
 
 			_enqueue.calledOnce.should.equal(true, "#_enqueue should have been called once");
 			_enqueue.args[0][0].should.equal("timing");
-			_enqueue.args[0][1].should.have.keys("utc")
+			_enqueue.args[0][1].should.have.keys("utc");
 			_enqueue.args[0][1].utc.should.equal(category);
 
-			fn.calledOnce.should.equal(true, "callback should have been called once")
+			fn.calledOnce.should.equal(true, "callback should have been called once");
 		});
 
 
@@ -78,7 +71,7 @@ describe("ua", function () {
 			var category = Math.random().toString();
 			var variable = Math.random().toString();
 
-			var visitor = ua()
+			var visitor = ua();
 
 			var result = visitor.timing(category, variable);
 
@@ -86,11 +79,11 @@ describe("ua", function () {
 			result.should.eql(visitor, "should return a visitor that is identical except for the context");
 
 			result.should.be.instanceof(ua.Visitor);
-			result._context.should.eql(_enqueue.args[0][1], "the pageview params should be persisted as the context of the visitor clone")
+			result._context.should.eql(_enqueue.args[0][1], "the pageview params should be persisted as the context of the visitor clone");
 
 			_enqueue.calledOnce.should.equal(true, "#_enqueue should have been called once");
 			_enqueue.args[0][0].should.equal("timing");
-			_enqueue.args[0][1].should.have.keys("utc", "utv")
+			_enqueue.args[0][1].should.have.keys("utc", "utv");
 			_enqueue.args[0][1].utc.should.equal(category);
 			_enqueue.args[0][1].utv.should.equal(variable);
 		});
@@ -101,7 +94,7 @@ describe("ua", function () {
 			var variable = Math.random().toString();
 			var fn = sinon.spy();
 
-			var visitor = ua()
+			var visitor = ua();
 
 			var result = visitor.timing(category, variable, fn);
 
@@ -109,15 +102,15 @@ describe("ua", function () {
 			result.should.eql(visitor, "should return a visitor that is identical except for the context");
 
 			result.should.be.instanceof(ua.Visitor);
-			result._context.should.eql(_enqueue.args[0][1], "the pageview params should be persisted as the context of the visitor clone")
+			result._context.should.eql(_enqueue.args[0][1], "the pageview params should be persisted as the context of the visitor clone");
 
 			_enqueue.calledOnce.should.equal(true, "#_enqueue should have been called once");
 			_enqueue.args[0][0].should.equal("timing");
-			_enqueue.args[0][1].should.have.keys("utc", "utv")
+			_enqueue.args[0][1].should.have.keys("utc", "utv");
 			_enqueue.args[0][1].utc.should.equal(category);
 			_enqueue.args[0][1].utv.should.equal(variable);
 
-			fn.calledOnce.should.equal(true, "callback should have been called once")
+			fn.calledOnce.should.equal(true, "callback should have been called once");
 		});
 
 
@@ -126,7 +119,7 @@ describe("ua", function () {
 			var variable = Math.random().toString();
 			var time = Math.random();
 
-			var visitor = ua()
+			var visitor = ua();
 
 			var result = visitor.timing(category, variable, time);
 
@@ -134,11 +127,11 @@ describe("ua", function () {
 			result.should.eql(visitor, "should return a visitor that is identical except for the context");
 
 			result.should.be.instanceof(ua.Visitor);
-			result._context.should.eql(_enqueue.args[0][1], "the pageview params should be persisted as the context of the visitor clone")
+			result._context.should.eql(_enqueue.args[0][1], "the pageview params should be persisted as the context of the visitor clone");
 
 			_enqueue.calledOnce.should.equal(true, "#_enqueue should have been called once");
 			_enqueue.args[0][0].should.equal("timing");
-			_enqueue.args[0][1].should.have.keys("utc", "utv", "utt")
+			_enqueue.args[0][1].should.have.keys("utc", "utv", "utt");
 			_enqueue.args[0][1].utc.should.equal(category);
 			_enqueue.args[0][1].utv.should.equal(variable);
 			_enqueue.args[0][1].utt.should.equal(time);
@@ -149,9 +142,9 @@ describe("ua", function () {
 			var category = Math.random().toString();
 			var variable = Math.random().toString();
 			var time = Math.random();
-			var fn = sinon.spy()
+			var fn = sinon.spy();
 
-			var visitor = ua()
+			var visitor = ua();
 
 			var result = visitor.timing(category, variable, time, fn);
 
@@ -159,16 +152,16 @@ describe("ua", function () {
 			result.should.eql(visitor, "should return a visitor that is identical except for the context");
 
 			result.should.be.instanceof(ua.Visitor);
-			result._context.should.eql(_enqueue.args[0][1], "the pageview params should be persisted as the context of the visitor clone")
+			result._context.should.eql(_enqueue.args[0][1], "the pageview params should be persisted as the context of the visitor clone");
 
 			_enqueue.calledOnce.should.equal(true, "#_enqueue should have been called once");
 			_enqueue.args[0][0].should.equal("timing");
-			_enqueue.args[0][1].should.have.keys("utc", "utv", "utt")
+			_enqueue.args[0][1].should.have.keys("utc", "utv", "utt");
 			_enqueue.args[0][1].utc.should.equal(category);
 			_enqueue.args[0][1].utv.should.equal(variable);
 			_enqueue.args[0][1].utt.should.equal(time);
 
-			fn.calledOnce.should.equal(true, "callback should have been called once")
+			fn.calledOnce.should.equal(true, "callback should have been called once");
 		});
 
 
@@ -178,7 +171,7 @@ describe("ua", function () {
 			var time = Math.random();
 			var label = Math.random().toString();
 
-			var visitor = ua()
+			var visitor = ua();
 
 			var result = visitor.timing(category, variable, time, label);
 
@@ -186,11 +179,11 @@ describe("ua", function () {
 			result.should.eql(visitor, "should return a visitor that is identical except for the context");
 
 			result.should.be.instanceof(ua.Visitor);
-			result._context.should.eql(_enqueue.args[0][1], "the pageview params should be persisted as the context of the visitor clone")
+			result._context.should.eql(_enqueue.args[0][1], "the pageview params should be persisted as the context of the visitor clone");
 
 			_enqueue.calledOnce.should.equal(true, "#_enqueue should have been called once");
 			_enqueue.args[0][0].should.equal("timing");
-			_enqueue.args[0][1].should.have.keys("utc", "utv", "utt", "utl")
+			_enqueue.args[0][1].should.have.keys("utc", "utv", "utt", "utl");
 			_enqueue.args[0][1].utc.should.equal(category);
 			_enqueue.args[0][1].utv.should.equal(variable);
 			_enqueue.args[0][1].utt.should.equal(time);
@@ -203,9 +196,9 @@ describe("ua", function () {
 			var variable = Math.random().toString();
 			var time = Math.random();
 			var label = Math.random().toString();
-			var fn = sinon.spy()
+			var fn = sinon.spy();
 
-			var visitor = ua()
+			var visitor = ua();
 
 			var result = visitor.timing(category, variable, time, label, fn);
 
@@ -213,17 +206,17 @@ describe("ua", function () {
 			result.should.eql(visitor, "should return a visitor that is identical except for the context");
 
 			result.should.be.instanceof(ua.Visitor);
-			result._context.should.eql(_enqueue.args[0][1], "the pageview params should be persisted as the context of the visitor clone")
+			result._context.should.eql(_enqueue.args[0][1], "the pageview params should be persisted as the context of the visitor clone");
 
 			_enqueue.calledOnce.should.equal(true, "#_enqueue should have been called once");
 			_enqueue.args[0][0].should.equal("timing");
-			_enqueue.args[0][1].should.have.keys("utc", "utv", "utt", "utl")
+			_enqueue.args[0][1].should.have.keys("utc", "utv", "utt", "utl");
 			_enqueue.args[0][1].utc.should.equal(category);
 			_enqueue.args[0][1].utv.should.equal(variable);
 			_enqueue.args[0][1].utt.should.equal(time);
 			_enqueue.args[0][1].utl.should.equal(label);
 
-			fn.calledOnce.should.equal(true, "callback should have been called once")
+			fn.calledOnce.should.equal(true, "callback should have been called once");
 		});
 
 
@@ -232,9 +225,9 @@ describe("ua", function () {
 			var variable = Math.random().toString();
 			var time = Math.random();
 			var label = Math.random().toString();
-			var params = {p: Math.random().toString()}
+			var params = {p: Math.random().toString()};
 
-			var visitor = ua()
+			var visitor = ua();
 
 			var result = visitor.timing(category, variable, time, label, params);
 
@@ -242,11 +235,11 @@ describe("ua", function () {
 			result.should.eql(visitor, "should return a visitor that is identical except for the context");
 
 			result.should.be.instanceof(ua.Visitor);
-			result._context.should.eql(_enqueue.args[0][1], "the pageview params should be persisted as the context of the visitor clone")
+			result._context.should.eql(_enqueue.args[0][1], "the pageview params should be persisted as the context of the visitor clone");
 
 			_enqueue.calledOnce.should.equal(true, "#_enqueue should have been called once");
 			_enqueue.args[0][0].should.equal("timing");
-			_enqueue.args[0][1].should.have.keys("utc", "utv", "utt", "utl", "p")
+			_enqueue.args[0][1].should.have.keys("utc", "utv", "utt", "utl", "p");
 			_enqueue.args[0][1].utc.should.equal(category);
 			_enqueue.args[0][1].utv.should.equal(variable);
 			_enqueue.args[0][1].utt.should.equal(time);
@@ -260,10 +253,10 @@ describe("ua", function () {
 			var variable = Math.random().toString();
 			var time = Math.random();
 			var label = Math.random().toString();
-			var params = {p: Math.random().toString()}
-			var fn = sinon.spy()
+			var params = {p: Math.random().toString()};
+      			var fn = sinon.spy();
 
-			var visitor = ua()
+			var visitor = ua();
 
 			var result = visitor.timing(category, variable, time, label, params, fn);
 
@@ -271,18 +264,18 @@ describe("ua", function () {
 			result.should.eql(visitor, "should return a visitor that is identical except for the context");
 
 			result.should.be.instanceof(ua.Visitor);
-			result._context.should.eql(_enqueue.args[0][1], "the pageview params should be persisted as the context of the visitor clone")
+			result._context.should.eql(_enqueue.args[0][1], "the pageview params should be persisted as the context of the visitor clone");
 
 			_enqueue.calledOnce.should.equal(true, "#_enqueue should have been called once");
 			_enqueue.args[0][0].should.equal("timing");
-			_enqueue.args[0][1].should.have.keys("utc", "utv", "utt", "utl", "p")
+			_enqueue.args[0][1].should.have.keys("utc", "utv", "utt", "utl", "p");
 			_enqueue.args[0][1].utc.should.equal(category);
 			_enqueue.args[0][1].utv.should.equal(variable);
 			_enqueue.args[0][1].utt.should.equal(time);
 			_enqueue.args[0][1].utl.should.equal(label);
 			_enqueue.args[0][1].p.should.equal(params.p);
 
-			fn.calledOnce.should.equal(true, "callback should have been called once")
+			fn.calledOnce.should.equal(true, "callback should have been called once");
 		});
 
 
@@ -293,9 +286,9 @@ describe("ua", function () {
 				utt: Math.random(),
 				utl: Math.random().toString(),
 				p: Math.random().toString()
-			}
+			};
 
-			var visitor = ua()
+			var visitor = ua();
 
 			var result = visitor.timing(params);
 
@@ -303,11 +296,11 @@ describe("ua", function () {
 			result.should.eql(visitor, "should return a visitor that is identical except for the context");
 
 			result.should.be.instanceof(ua.Visitor);
-			result._context.should.eql(_enqueue.args[0][1], "the pageview params should be persisted as the context of the visitor clone")
+			result._context.should.eql(_enqueue.args[0][1], "the pageview params should be persisted as the context of the visitor clone");
 
 			_enqueue.calledOnce.should.equal(true, "#_enqueue should have been called once");
 			_enqueue.args[0][0].should.equal("timing");
-			_enqueue.args[0][1].should.have.keys("utc", "utv", "utt", "utl", "p")
+			_enqueue.args[0][1].should.have.keys("utc", "utv", "utt", "utl", "p");
 			_enqueue.args[0][1].utc.should.equal(params.utc);
 			_enqueue.args[0][1].utv.should.equal(params.utv);
 			_enqueue.args[0][1].utt.should.equal(params.utt);
@@ -323,10 +316,10 @@ describe("ua", function () {
 				utt: Math.random(),
 				utl: Math.random().toString(),
 				p: Math.random().toString()
-			}
-			var fn = sinon.spy()
+			};
+			var fn = sinon.spy();
 
-			var visitor = ua()
+			var visitor = ua();
 
 			var result = visitor.timing(params, fn);
 
@@ -334,18 +327,18 @@ describe("ua", function () {
 			result.should.eql(visitor, "should return a visitor that is identical except for the context");
 
 			result.should.be.instanceof(ua.Visitor);
-			result._context.should.eql(_enqueue.args[0][1], "the pageview params should be persisted as the context of the visitor clone")
+			result._context.should.eql(_enqueue.args[0][1], "the pageview params should be persisted as the context of the visitor clone");
 
 			_enqueue.calledOnce.should.equal(true, "#_enqueue should have been called once");
 			_enqueue.args[0][0].should.equal("timing");
-			_enqueue.args[0][1].should.have.keys("utc", "utv", "utt", "utl", "p")
+			_enqueue.args[0][1].should.have.keys("utc", "utv", "utt", "utl", "p");
 			_enqueue.args[0][1].utc.should.equal(params.utc);
 			_enqueue.args[0][1].utv.should.equal(params.utv);
 			_enqueue.args[0][1].utt.should.equal(params.utt);
 			_enqueue.args[0][1].utl.should.equal(params.utl);
 			_enqueue.args[0][1].p.should.equal(params.p);
 
-			fn.calledOnce.should.equal(true, "callback should have been called once")
+			fn.calledOnce.should.equal(true, "callback should have been called once");
 		});
 
 	});
