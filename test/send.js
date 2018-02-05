@@ -20,7 +20,7 @@ describe("ua", function () {
 		});
 
 		it("should include data in POST body", function (done) {
-      nock('http://www.google-analytics.com')
+      nock('https://www.google-analytics.com')
         .post('/collect', 'first=124')
         .reply(204);
 
@@ -32,21 +32,8 @@ describe("ua", function () {
       });
 		});
 
-    it("should include data in POST body", function (done) {
-      nock('https://www.google-analytics.com')
-        .post('/collect', 'first=124')
-        .reply(204);
-
-      var visitor = ua({ https: true });
-      visitor._queue.push({ first: 124 });
-      visitor.send(function(err, count) {
-        count.should.eql(1);
-        done(err);
-      });
-    });
-
 		it("should send individual requests when batchSize is 1", function(done) {
-      nock('http://www.google-analytics.com')
+      nock('https://www.google-analytics.com')
         .post('/collect', 'first=124')
         .reply(204)
         .post('/collect', 'second=abc')
@@ -71,7 +58,7 @@ describe("ua", function () {
 		describe("#batching is true", function() {
 
 			it("should send request to collect path when only one payload", function(done) {
-        nock('http://www.google-analytics.com')
+        nock('https://www.google-analytics.com')
           .post('/collect', 'first=1234')
           .reply(204);
 
@@ -88,7 +75,7 @@ describe("ua", function () {
 			});
 
 			it("should send request to batch path when more than one payload sent", function(done) {
-        nock('http://www.google-analytics.com')
+        nock('https://www.google-analytics.com')
           .post('/batch', 'first=123\nsecond=abc\nthird=false')
           .reply(204);
 
@@ -107,7 +94,7 @@ describe("ua", function () {
 			});
 
 			it("should batch data based on batchSize", function(done) {
-        nock('http://www.google-analytics.com')
+        nock('https://www.google-analytics.com')
           .post('/batch', 'first=123\nsecond=abc')
           .reply(204)
           .post('/collect', 'third=false')
@@ -130,7 +117,7 @@ describe("ua", function () {
 		});
 
 		it("should add custom headers to request header", function (done) {
-      nock('http://www.google-analytics.com')
+      nock('https://www.google-analytics.com')
         .matchHeader('User-Agent', 'Test User Agent')
         .post('/collect', '')
         .reply(204);
