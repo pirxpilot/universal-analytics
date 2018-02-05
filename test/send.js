@@ -45,7 +45,7 @@ describe("ua", function () {
       });
     });
 
-		it("should send individual requests when batchting is false", function(done) {
+		it("should send individual requests when batchSize is 1", function(done) {
       nock('http://www.google-analytics.com')
         .post('/collect', 'first=124')
         .reply(204)
@@ -60,7 +60,7 @@ describe("ua", function () {
 				{ third: false }
 			];
 
-			var visitor = ua({enableBatching:false});
+			var visitor = ua({ batchSize: 1 });
 			visitor._queue.push.apply(visitor._queue, paramSets);
 			visitor.send(function(err, count) {
         count.should.eql(3);
