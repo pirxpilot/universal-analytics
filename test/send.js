@@ -32,6 +32,19 @@ describe("ua", function () {
       });
 		});
 
+    it("should include data in POST body", function (done) {
+      nock('https://www.google-analytics.com')
+        .post('/collect', 'first=124')
+        .reply(204);
+
+      var visitor = ua({ https: true });
+      visitor._queue.push({ first: 124 });
+      visitor.send(function(err, count) {
+        count.should.eql(1);
+        done(err);
+      });
+    });
+
 		it("should send individual requests when batchting is false", function(done) {
       nock('http://www.google-analytics.com')
         .post('/collect', 'first=124')
