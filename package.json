@@ -15,12 +15,12 @@
   ],
   "dependencies": {
     "debug": "^3.0.0",
-    "request": "2.x",
     "uuid": "^3.0.0"
   },
   "devDependencies": {
     "jshint": "~2",
     "mocha": "*",
+    "nock": "^9.1.6",
     "should": "*",
     "sinon": "^1.17.7"
   },
