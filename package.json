@@ -1,6 +1,6 @@
 {
   "name": "@pirxpilot/universal-analytics",
-  "version": "0.4.16",
+  "version": "1.0.0",
   "description": "A node module for Google's Universal Analytics tracking",
   "main": "index.js",
   "scripts": {

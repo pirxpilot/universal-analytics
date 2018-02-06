@@ -1,4 +1,14 @@
-# History
+
+1.0.0 / 2018-02-05
+==================
+
+ * rename to @pirxpilot/universal-analytics
+ * remove http only option - send https requests only
+ * add support for `validateHits` options
+ * remove support for `enableBatching`
+ * add support for `skipParamsTranslation` flag
+ * fix: stop overriding config params between requests
+ * replace proprietary logging with DEBUG
 
 ## 0.4.16
 
