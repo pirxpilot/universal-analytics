@@ -1,7 +1,7 @@
 
 var sinon = require("sinon");
 
-var ua = require("../lib/index.js");
+var ua = require("..");
 
 
 /* global describe, it, beforeEach, afterEach */

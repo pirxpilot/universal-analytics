@@ -2,7 +2,7 @@
 var uuid = require("uuid");
 var sinon = require("sinon");
 
-var ua = require("../lib/index.js");
+var ua = require("..");
 var utils = require("../lib/utils.js");
 var config = require("../lib/config.js");
 

@@ -1,7 +1,7 @@
 
 var nock = require("nock");
 
-var ua = require("../lib/index.js");
+var ua = require("..");
 
 /* global describe, it */
 
