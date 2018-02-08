@@ -1,7 +1,7 @@
 
 var sinon = require("sinon");
 
-var ua = require("../lib/index.js");
+var ua = require("..");
 
 /* global describe, it, beforeEach, afterEach */
 
@@ -191,7 +191,7 @@ describe("ua", function () {
 				ea: Math.random().toString(),
 				el: Math.random().toString(),
 				ev: Math.random(),
-				"p": "/" + Math.random()
+				"dp": "/" + Math.random()
 			};
 			var fn = sinon.spy();
 
@@ -199,36 +199,15 @@ describe("ua", function () {
 
 			_enqueue.calledOnce.should.equal(true, "#_enqueue should have been called once");
 			_enqueue.args[0][0].should.equal("event");
-			_enqueue.args[0][1].should.have.keys("ec", "ea", "el", "ev", "p");
+			_enqueue.args[0][1].should.have.keys("ec", "ea", "el", "ev", "dp");
 			_enqueue.args[0][1].ec.should.equal(params.ec);
 			_enqueue.args[0][1].ea.should.equal(params.ea);
 			_enqueue.args[0][1].el.should.equal(params.el);
 			_enqueue.args[0][1].ev.should.equal(params.ev);
-			_enqueue.args[0][1].p.should.equal(params.p);
+			_enqueue.args[0][1].dp.should.equal(params.dp);
 
 			fn.calledOnce.should.equal(true, "callback should have been called once");
 		});
-
-		it("should use the dp attribute as p for providing a event path", function () {
-			var params = {
-				ec: Math.random().toString(),
-				ea: Math.random().toString(),
-				"dp": "/" + Math.random(),
-			};
-			var json = JSON.stringify(params);
-
-			ua().event(params);
-
-			_enqueue.calledOnce.should.equal(true, "#_enqueue should have been called once");
-			_enqueue.args[0][0].should.equal("event");
-			_enqueue.args[0][1].should.have.keys("ec", "ea", "p");
-			_enqueue.args[0][1].ec.should.equal(params.ec);
-			_enqueue.args[0][1].ea.should.equal(params.ea);
-			_enqueue.args[0][1].p.should.equal(params.dp);
-
-			JSON.stringify(params).should.equal(json, "params should not have been modified");
-		});
-
 
 		it("should allow daisy-chaining and re-using parameters", function () {
 			var params = {
@@ -270,6 +249,31 @@ describe("ua", function () {
 			_enqueue.args[1][1].ec.should.equal(category);
 		});
 
+    it("should not reuse params when using low level append", function() {
+      var e1 = {
+        ec: "c1",
+        ea: "a1",
+        el: "l1",
+        ev: 0
+      };
+      var e2 = {
+        ec: "c2",
+        ea: "a2",
+        el: "l2",
+      };
+
+      ua().set('dp', 'path').append('event', e1).append('event', e2);
+
+      _enqueue.calledTwice.should.equal(true, "#_enqueue should have been called twice, once for each event");
+
+      _enqueue.args[0][0].should.equal('event');
+      _enqueue.args[1][0].should.equal('event');
+
+      _enqueue.args[0][1].should.eql({ dp: 'path', ec: "c1", ea: "a1", el: "l1", "ev": 0 });
+      _enqueue.args[1][1].should.eql({ dp: 'path', ec: "c2", ea: "a2", el: "l2" });
+
+    });
+
 		it("should re-use the path when daisy-chained to a pageview", function () {
 			var path = "/" + Math.random();
 			var params = {
@@ -283,8 +287,8 @@ describe("ua", function () {
 
 			_enqueue.calledThrice.should.equal(true, "#_enqueue should have been called twice, once for the pageview, once for the pageview");
 
-			_enqueue.args[1][1].p.should.equal(path);
-			_enqueue.args[2][1].p.should.equal(path);
+			_enqueue.args[1][1].should.have.property('dp', path);
+			_enqueue.args[2][1].should.have.property('dp', path);
 		});
 
 		it("should fail without event category", function () {

@@ -2,7 +2,7 @@
 var uuid = require("uuid");
 var sinon = require("sinon");
 
-var ua = require("../lib/index.js");
+var ua = require("..");
 
 /* global describe, it */
 
