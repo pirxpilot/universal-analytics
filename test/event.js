@@ -249,6 +249,31 @@ describe("ua", function () {
 			_enqueue.args[1][1].ec.should.equal(category);
 		});
 
+    it("should not reuse params when using low level append", function() {
+      var e1 = {
+        ec: "c1",
+        ea: "a1",
+        el: "l1",
+        ev: 0
+      };
+      var e2 = {
+        ec: "c2",
+        ea: "a2",
+        el: "l2",
+      };
+
+      ua().set('dp', 'path').append('event', e1).append('event', e2);
+
+      _enqueue.calledTwice.should.equal(true, "#_enqueue should have been called twice, once for each event");
+
+      _enqueue.args[0][0].should.equal('event');
+      _enqueue.args[1][0].should.equal('event');
+
+      _enqueue.args[0][1].should.eql({ dp: 'path', ec: "c1", ea: "a1", el: "l1", "ev": 0 });
+      _enqueue.args[1][1].should.eql({ dp: 'path', ec: "c2", ea: "a2", el: "l2" });
+
+    });
+
 		it("should re-use the path when daisy-chained to a pageview", function () {
 			var path = "/" + Math.random();
 			var params = {
