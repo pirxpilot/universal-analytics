@@ -1,4 +1,11 @@
 
+1.1.0 / 2018-02-07
+==================
+
+ * add `append` method for low level queue access
+ * use "dp" (and not "p") as parameter in events
+ * parallelize hit sending in parallel if possible
+
 1.0.0 / 2018-02-05
 ==================
 
