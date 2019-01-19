@@ -21,10 +21,10 @@
   },
   "devDependencies": {
     "jshint": "~2",
-    "mocha": "*",
-    "nock": "^9.1.6",
-    "should": "*",
-    "sinon": "^1.17.7"
+    "mocha": "~5",
+    "nock": "~10",
+    "should": "~13",
+    "sinon": "~1"
   },
   "author": "Jörg Tillmann <joerg@peaksandpies.com>",
   "license": "MIT",
