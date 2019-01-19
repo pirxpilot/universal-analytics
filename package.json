@@ -16,15 +16,15 @@
   "dependencies": {
     "@pirxpilot/in-groups-of": "~1",
     "async": "~2",
-    "debug": "^3.0.0",
+    "debug": "~2 || ~3 || ~4",
     "uuid": "^3.0.0"
   },
   "devDependencies": {
     "jshint": "~2",
-    "mocha": "*",
-    "nock": "^9.1.6",
-    "should": "*",
-    "sinon": "^1.17.7"
+    "mocha": "~5",
+    "nock": "~10",
+    "should": "~13",
+    "sinon": "~1"
   },
   "author": "Jörg Tillmann <joerg@peaksandpies.com>",
   "license": "MIT",
