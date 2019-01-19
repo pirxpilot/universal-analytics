@@ -1,12 +1,16 @@
-universal-analytics
+[![NPM version][npm-image]][npm-url]
+[![Build Status][travis-image]][travis-url]
+[![Dependency Status][deps-image]][deps-url]
+[![Development Dependency Status][dev-deps-image]][dev-deps-url]
+
+@pirxpilot/universal-analytics
 =======
+
+This is a fork of [universal-analytics][https://github.com/peaksandpies/universal-analytics] module.
 
 A node module for Google's [Universal Analytics](http://support.google.com/analytics/bin/answer.py?hl=en&hlrm=de&answer=2790010) tracking via the [Measurement Protocol](https://developers.google.com/analytics/devguides/collection/protocol/v1/).
 
 This module allows tracking data (or rather, users) from within a Node.js application. Tracking is initiated on the server side and, if required, does not require any more tracking in the browser.
-
-[![Build Status](https://travis-ci.org/peaksandpies/universal-analytics.png?branch=master)](https://travis-ci.org/peaksandpies/universal-analytics)
-
 
 # Table of Contents
 
@@ -66,7 +70,7 @@ var visitor = ua('UA-XXXX-XX', {https: true});
 Tracking a pageview without much else is now very simple:
 
 ```javascript
-visitor.pageview("/").send()
+visitor.pageview("/").send();
 ```
 
 The first argument for the pageview method is the path of the page to be tracked. Simply calling `pageview()` will not initiate a tracking request. In order to send off tracking to the Google Analytics servers you have two options:
@@ -84,7 +88,6 @@ visitor.pageview("/", function (err) {
   // the request was successfully sent off to Google.
 });
 ```
-
 
 
 # Tracking
@@ -137,16 +140,12 @@ The following method signatures are available for the `pageview()` method of the
 
 See also: [List of acceptable params](AcceptableParams.md).
 
-
-
-
-
 ## Screenview tracking
 
 Instead of pageviews app will want to track screenviews.
 
 ```javascript
-visitor.screenview("Home Screen", "App Name").send()
+visitor.screenview("Home Screen", "App Name").send();
 ```
 
 The following method signatures are available for #screenview:
@@ -166,24 +165,18 @@ The following method signatures are available for #screenview:
 
 See also: [List of acceptable params](AcceptableParams.md).
 
-
-
-
-
-
 ## Event tracking
-
 
 Tracking events with `universal-analytics` works like pageview tracking, only you have to provide different arguments:
 
 ```javascript
-visitor.event("Event Category", "Event Action").send()
+visitor.event("Event Category", "Event Action").send();
 ```
 
 This is the most straightforward way to track an event. The event attributes *label* and *value* are optional and can be provided if necessary:
 
 ```javascript
-visitor.event("Event Category", "Event Action", "…and a label", 42).send()
+visitor.event("Event Category", "Event Action", "…and a label", 42).send();
 ```
 
 Just like pageview tracking, event tracking supports a callback as the last argument:
@@ -191,7 +184,7 @@ Just like pageview tracking, event tracking supports a callback as the last argu
 ```javascript
 visitor.event("Event Category", "Event Action", "…and a label", 42, function (err) {
   // …
-})
+});
 ```
 
 An additional attribute for events is the path of the page they should be associated with in Google Analytics. You can provide this path via an additional params object:
@@ -199,7 +192,7 @@ An additional attribute for events is the path of the page they should be associ
 ```javascript
 visitor.event("Event Category", "Event Action", "…and a label", 42, {p: "/contact"}, function (err) {
   // …
-})
+});
 ```
 
 *Notice:* The page path attribute for the event is called `p` which differs from the `dp` attribute used in the pageview tracking example. `universal-analytics` is smart enough to use the `dp` attribute should you provide it instead of `p`.
@@ -213,7 +206,7 @@ var params = {
   el: "…and a label",
   ev: 42,
   dp: "/contact"
-}
+};
 
 visitor.event(params).send();
 ```
@@ -242,10 +235,6 @@ The following method signatures are available for #event:
 
 See also: [List of acceptable params](AcceptableParams.md).
 
-
-
-
-
 ## E-commerce tracking
 
 E-commerce tracking in general is a bit more complex. It requires a combination of one call to the `transaction()` method and one or more calls to the `item()` method.
@@ -255,7 +244,7 @@ visitor
   .transaction("trans-12345", 500)   // Create transaction trans-12345 worth 500 total.
   .item(300, 1, "item-54321")        // Add 1 unit the item item-54321 worth 300.
   .item(200, 2, "item-41325")        // Add 2 units the item item-41325 worth 200.
-  .send()
+  .send();
 ```
 
 Once again, daisy-chaining simplifies associating the items with the transaction. Officially, nothing but the transaction ID is a requirement for both the transaction and the items. However, providing a minimum set of information (revenue for the transaction, price, quantity and ID for the items) is recommended.
@@ -267,7 +256,7 @@ visitor
   .transaction({ti: "trans-12345", tr: 500, ts: 50, tt: 100, ta: "Partner 13"})
   .item({ip: 300, iq: 1, ic: "item-54321", in: "Item 54321", iv: "Blue"})
   .item({ip: 200, iq: 2, ic: "item-41325", in: "Item 41325", iv: "XXL"})
-  .send()
+  .send();
 ```
 
 In case an additional item has to be added later on or daisy-chaining is not available for another reason, each item can be given an associated transaction ID via the params object as well:
@@ -318,17 +307,12 @@ The following method signatures are available for #item:
 
 See also: [List of acceptable params](AcceptableParams.md).
 
-
-
-
-
-
 ## Exception tracking
 
 Exception tracking is a way to keep track of any sort of application errors and bugs with Google Analytics. Using it with this module is a way to capture server-side problems.
 
 ```javascript
-visitor.exception("StackOverflow Error").send()
+visitor.exception("StackOverflow Error").send();
 ```
 
 As an additional information, the exception can be flagged as fatal if the error was exceptionally bad.
@@ -351,17 +335,12 @@ The following method signatures are available for #exception:
 
 See also: [List of acceptable params](AcceptableParams.md).
 
-
-
-
-
-
 ## User timing tracking
 
 Tracking user timings is a way to capture time-based information similar to the page load speed data tracked automatically by Google Analytics. All arguments to this tracking method are optional, but a category, a variable and a time value should be provided. The time value should be provided in milliseconds.
 
 ```javascript
-visitor.timing("User interaction", "Time to open login overlay", 12547).send()
+visitor.timing("User interaction", "Time to open login overlay", 12547).send();
 ```
 
 The following method signatures are available for #timing:
@@ -379,16 +358,12 @@ The following method signatures are available for #timing:
 
 See also: [List of acceptable params](AcceptableParams.md).
 
-
-
-
-
 ## Transaction tracking
 
 Transactions are the main tracking calls for ecommerce tracking
 
 ```javascript
-visitor.transaction("123456", "449.99").send()
+visitor.transaction("123456", "449.99").send();
 ```
 
 The following method signatures are available for #transaction:
@@ -410,16 +385,12 @@ The following method signatures are available for #transaction:
 
 See also: [List of acceptable params](AcceptableParams.md).
 
-
-
-
-
 ### Transaction item tracking
 
 Transaction consist of one or more items.
 
 ```javascript
-visitor.item(449.99, 1, "ID54321", "T-Shirt", {ti: "123456"}).send()
+visitor.item(449.99, 1, "ID54321", "T-Shirt", {ti: "123456"}).send();
 ```
 
 The following method signatures are available for #item:
@@ -441,23 +412,18 @@ The following method signatures are available for #item:
 
 See also: [List of acceptable params](AcceptableParams.md).
 
-
-
-
-
-
 # Daisy-chaining tracking calls
 
 We have seen basic daisy-chaining above when calling `send()` right after `pageview()` and `event()`:
 
 ```javascript
-visitor.pageview("/").send()
+visitor.pageview("/").send();
 ```
 
 Every call of a tracking method returns a visitor instance you can re-use:
 
 ```javascript
-visitor.pageview("/").pageview("/contact").send()
+visitor.pageview("/").pageview("/contact").send();
 ```
 
 Granted, the chance of this example actually happening in practice might be rather low.
@@ -465,13 +431,13 @@ Granted, the chance of this example actually happening in practice might be rath
 However, `universal-analytics` is smart when it comes to daisy-chaining certain calls. In many cases, a `pageview()` call is instantly followed by an `event()` call to track some additional information about the current page. `universal-analytics` makes creating the connection between the two easy:
 
 ```javascript
-visitor.pageview("/landing-page-1").event("Testing", "Button color", "Blue").send()
+visitor.pageview("/landing-page-1").event("Testing", "Button color", "Blue").send();
 ```
 This is the same as two distinct tracking calls.
 
 ```javascript
-visitor.pageview("/landing-page-1").send()
-visitor.event("Testing", "Button color", "Blue", {p: "/landing-page-1"}).send()
+visitor.pageview("/landing-page-1").send();
+visitor.event("Testing", "Button color", "Blue", {p: "/landing-page-1"}).send();
 ```
 
 Daisy-chaining is context-aware and in this case placing the `event()` call right after the `pageview()` call results in the event being associated with the page path tracking in the `pageview()` call. Even though the attributes (`dp` and `p`)  are different internally.
@@ -498,23 +464,15 @@ visitor
 In this example the event category ("Mail Server") is not repeated in the second tracking call.
 
 
-
-
 # Setting persistent parameters
 
 Some parameters should be in every tracking call, such as a user ID or custom dimensions that never or hardly change. For such situations a `#set(key, value)` method is available
 
 ```javascript
-  visitor.set("uid", "123456789")
+  visitor.set("uid", "123456789");
 ```
 
 The uid parameter will be part of every tracking request of that visitor from now on.
-
-
-
-
-
-
 
 
 # Session-based identification
@@ -606,25 +564,14 @@ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+[npm-image]: https://img.shields.io/npm/v/@pirxpilot/universal-analytics.svg
+[npm-url]: https://npmjs.org/package/@pirxpilot/universal-analytics
 
+[travis-image]: https://img.shields.io/travis/pirxpilot/universal-analytics.svg
+[travis-url]: https://travis-ci.org/pirxpilot/universal-analytics
 
+[deps-image]: https://img.shields.io/david/pirxpilot/universal-analytics/pu.svg
+[deps-url]: https://david-dm.org/pirxpilot/universal-analytics/pu
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+[dev-deps-image]: https://img.shields.io/david/dev/pirxpilot/universal-analytics/pu.svg
+[dev-deps-url]: https://david-dm.org/pirxpilot/universal-analytics/pu?type=dev
