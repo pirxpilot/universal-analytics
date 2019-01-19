@@ -1,4 +1,11 @@
 
+1.1.1 / 2019-01-18
+==================
+
+ * fix badges in Readme
+ * add empty error handler
+ * use dedicated agent for googlei analytics requests
+
 1.1.0 / 2018-02-07
 ==================
 
